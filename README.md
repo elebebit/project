@@ -1,1 +1,1 @@
-# package for use
+# invidual project for use

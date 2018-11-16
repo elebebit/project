@@ -52,7 +52,8 @@ def readfolder(folder,pic, mode):
 		for filename in files: 
 			filepath = os.path.join(root,filename)
 			if (filepath.endswith(".png") or filepath.endswith(".jpg")): 
-				remember = similary_calculate(pic,filename,mode) 
+				#remember = similary_calculate(pic,filename,mode) 
+				remember = similary_calculate(pic,filepath,mode) 
 				print (filename) 
 				print (remember)
 				if (remember > t) and remember!= 1: 

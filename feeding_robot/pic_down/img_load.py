@@ -1,3 +1,4 @@
+## with imagenet
 import sys
 import os
 import urllib

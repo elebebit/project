@@ -3,14 +3,14 @@ from icrawler import ImageDownloader
 from icrawler.builtin import GoogleImageCrawler
 from six.moves.urllib.parse import urlparse
 
-search='红烧肉'# name of search
+search='炸鸡'# name of search
 
 class PrefixNameDownloader(ImageDownloader):
 
     def get_filename(self, task, default_ext):
         filename = super(PrefixNameDownloader, self).get_filename(
             task, default_ext)
-        return 'predixx_' + filename
+        return search+'_'+ filename
 
 
 class Base64NameDownloader(ImageDownloader):
@@ -34,4 +34,4 @@ google_crawler = GoogleImageCrawler(downloader_cls=PrefixNameDownloader,
                                     downloader_threads=4,
                                     storage={'root_dir': 'images/'+search})
 
-google_crawler.crawl(search, max_num=10)
+google_crawler.crawl(search, max_num=50)

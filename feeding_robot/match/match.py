@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-  
 
 import os 
 import PIL.Image as Image 
 
 ########################
 
-receive_fig='ss.jpg'
+receive_fig='/home/longu/Desktop/match/sample2.jpg'
+pic_folder='/home/longu/Desktop/match/database/'
 
 ########################
-
 def difference(hist1,hist2): 
 	sum1 = 0
 	for i in range(len(hist1)):
@@ -19,12 +18,12 @@ def difference(hist1,hist2):
 	return sum1/len(hist1) 
 
 def similary_calculate(path1 , path2 , mode): 
-	if(mode == 3): 
-		img1 = Image.open(path1).resize((8,8)).convert('1') 
-		img2 = Image.open(path2).resize((8,8)).convert('1')
+	if(mode == True): 
+		img1 = Image.open(path1).resize((256,256)).convert('1') 
+		img2 = Image.open(path2).resize((256,256)).convert('1')
 		hist1 = list(img1.getdata()) 
 		hist2 = list(img2.getdata())
-		print("------------------------ \n") 
+		#print("\n------------------------") 
 		return difference(hist1, hist2)
 
 		# 预处理 
@@ -43,29 +42,28 @@ def similary_calculate(path1 , path2 , mode):
 			return sum/16 
 		return 0 
 
-def readfolder(folder,pic, mode):
+def readfolder(dic,pic, mode):
 # 不同的mode对应不同的类型
-	file_list = [] 
+	file_list=os.listdir(dic) 
 	t = 0 
 	file_temp = ''
-	for root,directors,files in os.walk(folder): 
-		for filename in files: 
-			filepath = os.path.join(root,filename)
-			if (filepath.endswith(".png") or filepath.endswith(".jpg")): 
-				#remember = similary_calculate(pic,filename,mode) 
-				remember = similary_calculate(pic,filepath,mode) 
-				print (filename) 
-				print (remember)
-				if (remember > t) and remember!= 1: 
-					file_temp = filename 
-					t = remember 
+
+	for dic_name in file_list:
+		folder=dic+'/'+dic_name
+		for root,directors,files in os.walk(folder): 
+			for filename in files: 
+				filepath = os.path.join(root,filename)
+				if (filepath.endswith(".png") or filepath.endswith(".jpg")): 	
+					#remember = similary_calculate(pic,filename,mode) 			
+					remember = similary_calculate(pic,filepath,mode)
+					#print (filename) 
+					#print (remember)
+					if (remember > t) and remember!= 1: 
+						file_temp = filename.split('_')[0] 
+						t = remember 
+	#print('*************************\n')					
 	return file_temp 
+
 if __name__ == '__main__': 
-	#print ("###########直方图的距离计算#############")
-	#print ("相似度最高的图是" + readfolder('/home/longu/Desktop/project/feeding/match/code/','1.jpg',1))
-	#print ("###########分块直方图的距离计算#############")
-	#print ("相似度最高的图是" + readfolder('/home/longu/Desktop/project/feeding/match/code/','1.jpg',2)) 
-	print ("##############感知哈希算法###############")
-	print ("相似度最高的图是" + readfolder('/home/longu/Desktop/project/feeding/match/code/',receive_fig,3))
 
-
+	print ("The most similary figure is :" + readfolder(pic_folder,receive_fig,True))

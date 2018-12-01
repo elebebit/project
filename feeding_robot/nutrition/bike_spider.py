@@ -7,8 +7,8 @@ class StockItem(scrapy.Item):
     companyname     = scrapy.Field()
     companyurl      = scrapy.Field()
  
-class CompanySpider(scrapy.Spider):
-    name = "CompanySpider"
+class NutritionSpider(scrapy.Spider):
+    name = "NutritionSpider"
     start_urls = [
         'http://japan-ar.com/list.html',
     ]

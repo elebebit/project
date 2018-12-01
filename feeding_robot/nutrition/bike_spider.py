@@ -1,36 +1,40 @@
 import scrapy
- 
+
 class StockItem(scrapy.Item):
-    stockcode       = scrapy.Field()
-    doclink         = scrapy.Field()
-    doctype         = scrapy.Field()
-    companyname     = scrapy.Field()
-    companyurl      = scrapy.Field()
+	Project = scrapy.Field()
+	data_100g = scrapy.Field()
+	NRVs= scrapy.Field()
  
 class NutritionSpider(scrapy.Spider):
-    name = "NutritionSpider"
-    start_urls = [
-        'http://japan-ar.com/list.html',
-    ]
- 
-    def parse(self, response):
-        for quote in response.css('tr'):
-            print ("quote:")
-            text = quote.xpath('descendant-or-self::a/text()').extract()
-            print (quote.css('span+*::text').extract())
-#            if quote.css('a::text').extract_first() == 'AR' or quote.css('a::text').extract_first() == 'IR' :
-            if quote.css('a::text').extract_first() == 'AR':
-                item = StockItem()
-                item['stockcode']   =   quote.css('td::text').extract_first()
-                item['doctype']     =   quote.css('a::text').extract_first()
-                item['doclink']     =   quote.css('a::attr(href)').extract_first()
-                item['companyname'] =   quote.css('span+*::text').extract()[0]
-                item['companyurl']  =   quote.css('span+*::attr(href)').extract()[0]
-                yield item
- 
-        next_page = response.css('li.next a::attr("href")').extract_first()
-        if next_page is not None:
-            yield response.follow(next_page, self.parse)
+	
+	name = "NutritionSpider"
+	start_urls = [
+	'https://baikebcs.bdimg.com/baike-other/nutrition_module/1188630.html',
+	]
+
+
+	def parse(self, response):
+		for quote in response.css('tr'):
+			print("\n---------------------------------------")
+			#print ("quote:",quote)
+			data= quote.css('div::text').extract()
+			print('data:',data)
+
+			if data[0] != '项目':
+				item = StockItem()
+				item['Project'] =  data[0]
+				item['data_100g'] =  data[1]
+				item['NRVs'] = data[2]	
+				yield item
+
+				item = StockItem()			
+				item['Project'] =   data[3]
+				item['data_100g'] =  data[4]
+				item['NRVs'] = data[5]
+				yield item
+
+			else:	
+				continue	
             
 # scrapy runspider bike_spider.py -o nur.csv
 
